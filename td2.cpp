@@ -97,7 +97,9 @@ void enleverFilmListe(ListeFilms& liste, Film* film){
 
 //TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur,
 // ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
-
+Acteur* trouverActeur(span<Film*>& collection, const string& nomActeur){
+	for(auto i : range(ssize(collection)))
+}
 //TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.  La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau (cherché par nom en utilisant la fonction ci-dessus).
 Acteur* lireActeur(istream& fichier)
 {
