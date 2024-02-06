@@ -89,39 +89,72 @@ void enleverFilmListe(ListeFilms& liste, Film* film){
 			for(auto j : range(liste.nElements)){
 				liste.elements[j] = liste.elements[j + 1];
 			}
-			--liste.nElements;
-			return;
+			liste.elements[liste.nElements] = nullptr;
+			break;
 		}
 	}
 }
 
 //TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur,
 // ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
-Acteur* trouverActeur(span<Film*>& collection, const string& nomActeur){
-	for(auto i : range(ssize(collection)))
+Acteur* trouverActeur(const ListeFilms& liste, const string& nom_acteur){
+	span<Film*> collection_films(liste.elements, liste.nElements);
+	for(Film* film : collection_films){ // pour chaque pointeur de film
+		span<Acteur*> collection_acteur(film -> acteurs.elements, film -> acteurs.nElements); //span de pointeurs vers des acteur du film qu'on itere
+		for(Acteur* acteur: collection_acteur){ //pour chaque pointeur d'acteur
+			if (acteur->nom == nom_acteur) { //si le nom de l'acteur correspond au pointeur d'acteur qui est en train d'être itéré
+				return acteur; 
+			}
+		}
+	}
+	return nullptr; //si jamais aucun acteur n'a été trouvé
 }
-//TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.  La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau (cherché par nom en utilisant la fonction ci-dessus).
-Acteur* lireActeur(istream& fichier)
+
+//TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.
+// La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau
+// (cherché par nom en utilisant la fonction ci-dessus).
+Acteur* lireActeur(istream& fichier, const ListeFilms& liste) // verifier 
 {
-	Acteur acteur = {};
+	Acteur acteur = {}; 
 	acteur.nom            = lireString(fichier);
 	acteur.anneeNaissance = int(lireUintTailleVariable (fichier));
 	acteur.sexe           = char(lireUintTailleVariable(fichier));
-	return {}; //TODO: Retourner un pointeur soit vers un acteur existant ou un nouvel acteur ayant les bonnes informations, selon si l'acteur existait déjà.  Pour fins de débogage, affichez les noms des acteurs crées; vous ne devriez pas voir le même nom d'acteur affiché deux fois pour la création.
+	Acteur* acteur_existant = trouverActeur(liste, acteur.nom); 
+	if (acteur_existant != nullptr){
+		return acteur_existant; // s'il existe deja
+	}
+	else{
+		Acteur* acteur_nv = new Acteur(acteur);
+		return acteur_nv;
+	}
+	return {}; //TODO: Retourner un pointeur soit vers un acteur existant ou un nouvel acteur ayant les bonnes informations,
+	// selon si l'acteur existait déjà.Pour fins de débogage, affichez les noms des acteurs crées; vous ne devriez pas voir 
+	//le même nom d'acteur affiché deux fois pour la création.
 }
 
-Film* lireFilm(istream& fichier)
+Film* lireFilm(istream& fichier, const ListeFilms& liste)
 {
 	Film film = {};
 	film.titre       = lireString(fichier);
 	film.realisateur = lireString(fichier);
 	film.anneeSortie = int(lireUintTailleVariable(fichier));
 	film.recette     = int(lireUintTailleVariable(fichier));
-	film.acteurs.nElements = int(lireUintTailleVariable(fichier));  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
+	film.acteurs.nElements = int(lireUintTailleVariable(fichier));  //NOTE: Vous avez le droit d'allouer d'un coup le 
+	//tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions
+	// d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour 
+	//réutiliser cette réallocation.
 	for (int i = 0; i < film.acteurs.nElements; i++) {
-		lireActeur(fichier); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
+		Acteur* acteur = lireActeur(fichier, liste); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
+		film.acteurs.elements[i] = acteur; 
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.
-	}
+		if (acteur->joueDans.nElements == 0){
+			acteur->joueDans.elements = new Film*[1];
+		}
+		else{
+			Film** nouveaux_films = new Film*[acteur->joueDans.nElements + 1];
+		}
+		
+	}	
 	return {}; //TODO: Retourner le pointeur vers le nouveau film.
 }
 
