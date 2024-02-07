@@ -86,9 +86,10 @@ void ajouterFilmListe(ListeFilms& liste, Film* film){
 void enleverFilmListe(ListeFilms& liste, Film* film){
 	for(auto i : range(liste.nElements)){
 		if (liste.elements[i] == film){
-			for(auto j : range(liste.nElements)){
-				liste.elements[j] = liste.elements[j + 1];
+			for(auto j : range(liste.nElements - i - 1)){
+				liste.elements[j + i] = liste.elements[i+ j + 1];
 			}
+			liste.nElements--;
 			liste.elements[liste.nElements] = nullptr;
 			break;
 		}
@@ -147,8 +148,8 @@ Film* lireFilm(istream& fichier, const ListeFilms& liste)
 		Acteur* acteur = lireActeur(fichier, liste); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
 		film.acteurs.elements[i] = acteur; 
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.
-		if (acteur->joueDans.nElements == 0){
-			acteur->joueDans.elements = new Film*[1];
+		if (acteur->joueDans.nElements == 0){ // s'il y a rien
+			acteur->joueDans.elements = new Film*[1]; // alloue memoire 
 		}
 		else{
 			Film** nouveaux_films = new Film*[acteur->joueDans.nElements + 1];
@@ -166,14 +167,28 @@ ListeFilms creerListe(string nomFichier)
 	int nElements = int(lireUintTailleVariable(fichier));
 
 	//TODO: Créer une liste de films vide.
+	ListeFilms liste;
+	liste.capacite = nElements;
+	liste.nElements = 0;
+	liste.elements = new Film* [liste.capacite];
 	for (int i = 0; i < nElements; i++) {
-		lireFilm(fichier); //TODO: Ajouter le film à la liste.
+		Film* film = lireFilm(fichier, liste); //TODO: Ajouter le film à la liste.
+		ajouterFilmListe(liste, film); 
 	}
 	
-	return {}; //TODO: Retourner la liste de films.
+	return {liste}; //TODO: Retourner la liste de films.
 }
 
-//TODO: Une fonction pour détruire un film (relâcher toute la mémoire associée à ce film, et les acteurs qui ne jouent plus dans aucun films de la collection).  Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
+//TODO: Une fonction pour détruire un film (relâcher toute la mémoire associée à ce film, et les acteurs qui ne jouent plus
+// dans aucun films de la collection).  Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.
+//  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
+void detruireFilm(Film* film, ListeFilms& liste)
+{
+	enleverFilmListe(liste,film);
+	delete film;
+
+
+}
 
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 
@@ -183,10 +198,19 @@ void afficherActeur(const Acteur& acteur)
 }
 
 //TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
+void affiherFilm(const Film& film)
+{
+	cout<< " " << film.titre << ", " << film.realisateur << ", " << film.anneeSortie << ", " << film.recette << endl;
+	for(auto i : range(film.acteurs.nElements)){
+		const Acteur* acteur = film.acteurs.elements[i];
+		afficherActeur(* acteur); // dereference donc c'est la valeur de l'acteur elle meme
+	}
+}
 
 void afficherListeFilms(const ListeFilms& listeFilms)
 {
-	//TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
+	//TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de
+	// séparations dans ce progamme).
 	static const string ligneDeSeparation = {};
 	cout << ligneDeSeparation;
 	//TODO: Changer le for pour utiliser un span.
@@ -199,7 +223,7 @@ void afficherListeFilms(const ListeFilms& listeFilms)
 void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur)
 {
 	//TODO: Utiliser votre fonction pour trouver l'acteur (au lieu de le mettre à nullptr).
-	const Acteur* acteur = nullptr;
+	const Acteur* acteur = trouverActeur(listeFilms, nomActeur);
 	if (acteur == nullptr)
 		cout << "Aucun acteur de ce nom" << endl;
 	else
