@@ -86,7 +86,7 @@ void ajouterFilmListe(ListeFilms& liste, Film* film){
 void enleverFilmListe(ListeFilms& liste, Film* film){
 	for(auto i : range(liste.nElements)){
 		if (liste.elements[i] == film){
-			for(auto j : range(liste.nElements - i - 1)){ //a voir apres 
+			for(auto j : range(liste.nElements - i - 1)){ //a checker urgent
 				liste.elements[j + i] = liste.elements[i+ j + 1];
 			}
 			liste.nElements--;
@@ -191,16 +191,25 @@ void detruireFilm(Film* film, ListeFilms& liste)
 			if (chaque_acteur -> joueDans.nElements == 1){
 				delete chaque_acteur;
 			}
-			
-			for(Film* film_acteur : chaque_acteur->joueDans.nElements) {
-				
+			span<Film*> collection_film_acteur(chaque_acteur-> joueDans.elements, chaque_acteur-> joueDans.nElements);
+			for(Film* film_acteur : collection_film_acteur) {
+				if (film_acteur == film){
+					enleverFilmListe(liste, film_acteur);
+					delete film_acteur;
+				}
 			}
 		}
-
+		delete film;
 	}
 }
 
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
+void detruireListeFilms(ListeFilms& liste)
+{
+	for (auto i : range(liste.nElements)){
+		detruireFilm(liste.elements[i], liste);
+	}
+}
 
 void afficherActeur(const Acteur& acteur)
 {
@@ -224,7 +233,8 @@ void afficherListeFilms(const ListeFilms& listeFilms)
 	static const string ligneDeSeparation = {};
 	cout << ligneDeSeparation;
 	//TODO: Changer le for pour utiliser un span.
-	for (int i = 0; i < listeFilms.nElements; i++) {
+	span<Film*> films(listeFilms.elements,listeFilms.nElements);
+		for (auto i : range())
 		//TODO: Afficher le film.
 		cout << ligneDeSeparation;
 	}
