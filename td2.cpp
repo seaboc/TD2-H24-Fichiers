@@ -86,7 +86,7 @@ void ajouterFilmListe(ListeFilms& liste, Film* film){
 void enleverFilmListe(ListeFilms& liste, Film* film){
 	for(auto i : range(liste.nElements)){
 		if (liste.elements[i] == film){
-			for(auto j : range(liste.nElements - i - 1)){
+			for(auto j : range(liste.nElements - i - 1)){ //a voir apres 
 				liste.elements[j + i] = liste.elements[i+ j + 1];
 			}
 			liste.nElements--;
@@ -184,10 +184,20 @@ ListeFilms creerListe(string nomFichier)
 //  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
 void detruireFilm(Film* film, ListeFilms& liste)
 {
-	enleverFilmListe(liste,film);
-	delete film;
+	span<Film*> collection_films(liste.elements, liste.nElements);
+	for(Film* chaque_film : collection_films){
+		span<Acteur*> collection_acteur(film -> acteurs.elements, film -> acteurs.nElements); 
+		for(Acteur* chaque_acteur : collection_acteur){
+			if (chaque_acteur -> joueDans.nElements == 1){
+				delete chaque_acteur;
+			}
+			
+			for(Film* film_acteur : chaque_acteur->joueDans.nElements) {
+				
+			}
+		}
 
-
+	}
 }
 
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.

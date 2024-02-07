@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/Users/serenasaada/Documents/TD2-H24-Fichiers/build",
+  "command": "/usr/bin/clang++  -isystem /Users/serenasaada/Documents/TD2-H24-Fichiers/include -g -std=c++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -fsigned-char -Wall -Wextra -Wpedantic -Woverloaded-virtual -Wno-unknown-pragmas -Wno-enum-compare -Wshadow --coverage -o CMakeFiles/ProjetTD2.dir/bibliotheque_cours/bibliotheque_cours.cpp.o -c /Users/serenasaada/Documents/TD2-H24-Fichiers/bibliotheque_cours/bibliotheque_cours.cpp",
+  "file": "/Users/serenasaada/Documents/TD2-H24-Fichiers/bibliotheque_cours/bibliotheque_cours.cpp",
+  "output": "CMakeFiles/ProjetTD2.dir/bibliotheque_cours/bibliotheque_cours.cpp.o"
+},
+{
+  "directory": "/Users/serenasaada/Documents/TD2-H24-Fichiers/build",
+  "command": "/usr/bin/clang++  -isystem /Users/serenasaada/Documents/TD2-H24-Fichiers/include -g -std=c++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -fsigned-char -Wall -Wextra -Wpedantic -Woverloaded-virtual -Wno-unknown-pragmas -Wno-enum-compare -Wshadow --coverage -o CMakeFiles/ProjetTD2.dir/bibliotheque_cours/verification_allocation.cpp.o -c /Users/serenasaada/Documents/TD2-H24-Fichiers/bibliotheque_cours/verification_allocation.cpp",
+  "file": "/Users/serenasaada/Documents/TD2-H24-Fichiers/bibliotheque_cours/verification_allocation.cpp",
+  "output": "CMakeFiles/ProjetTD2.dir/bibliotheque_cours/verification_allocation.cpp.o"
+},
+{
+  "directory": "/Users/serenasaada/Documents/TD2-H24-Fichiers/build",
+  "command": "/usr/bin/clang++  -isystem /Users/serenasaada/Documents/TD2-H24-Fichiers/include -g -std=c++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -fsigned-char -Wall -Wextra -Wpedantic -Woverloaded-virtual -Wno-unknown-pragmas -Wno-enum-compare -Wshadow --coverage -o CMakeFiles/ProjetTD2.dir/td2.cpp.o -c /Users/serenasaada/Documents/TD2-H24-Fichiers/td2.cpp",
+  "file": "/Users/serenasaada/Documents/TD2-H24-Fichiers/td2.cpp",
+  "output": "CMakeFiles/ProjetTD2.dir/td2.cpp.o"
+}
+]
