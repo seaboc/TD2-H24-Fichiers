@@ -160,7 +160,7 @@ Film* lireFilm(istream& fichier, ListeFilms& liste)
 		Acteur* acteur = lireActeur(fichier, liste); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
 		nv_film->acteurs.elements[i] = acteur;
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.;
-		ajouterFilmListe(acteur->joueDans);
+		ajouterFilmListe(acteur->joueDans, nv_film);
 	
 	}	
 	return (nv_film); //TODO: Retourner le pointeur vers le nouveau film.
