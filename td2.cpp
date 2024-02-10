@@ -63,7 +63,7 @@ string lireString(istream& fichier)
 //dans le cas où la capacité est insuffisante pour ajouter l'élément.  Il faut alors allouer un nouveau tableau plus grand, 
 //copier ce qu'il y avait dans l'ancien, et éliminer l'ancien trop petit.  
 //Cette fonction ne doit copier aucun Film ni Acteur, elle doit copier uniquement des pointeurs.
-void ajouterFilmListe(ListeFilms& liste){ // il y avait film mais j'ai enlever pcq ils ont dis qu'on lutilise pas 
+void ajouterFilmListe(ListeFilms& liste, Film* film){ // il y avait film mais j'ai enlever pcq ils ont dis qu'on lutilise pas 
 	int nouvelle_capacite;
 	if (liste.nElements == liste.capacite){
 		if (liste.capacite == 0){
@@ -173,7 +173,7 @@ ListeFilms creerListe(string nomFichier)
 	liste.elements = new Film* [liste.capacite];
 	for (int i = 0; i < nElements; i++) {
 		Film* film = lireFilm(fichier, liste); //TODO: Ajouter le film à la liste.
-		ajouterFilmListe(liste); 
+		ajouterFilmListe(liste,film); 
 	}
 	
 	return (liste); //TODO: Retourner la liste de films.
@@ -202,7 +202,6 @@ void detruireFilm(Film* film, ListeFilms& liste)
 		delete film;
 }
 
-
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 void detruireListeFilms(ListeFilms& liste)
 {
@@ -230,7 +229,7 @@ void afficherListeFilms(const ListeFilms& listeFilms)
 {
 	//TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de
 	// séparations dans ce progamme).
-	static const string ligneDeSeparation = "----------------------------------------------------";
+	static const string ligneDeSeparation =  "\n\033[35m──────────────────────────────────────────────────\033[0m\n";
 	cout << ligneDeSeparation;
 	//TODO: Changer le for pour utiliser un span.
 	span<Film*> films(listeFilms.elements,listeFilms.nElements);
@@ -264,17 +263,8 @@ int main()
 
 	//TODO: La ligne suivante devrait lire le fichier binaire en allouant la mémoire nécessaire.  Devrait afficher les
 	// noms de 20 acteurs sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
-	ifstream fichier("films.bin");
-	ListeFilms listeFilms = creerListe("films.bin");
-	int compteur = 0;
 
-	while (compteur < 20) {
-        Acteur* acteur = lireActeur(fichier, listeFilms);
-        if (acteur) {
-            cout << " " << acteur->nom << endl;
-        }
-		compteur++;
-	}
+	ListeFilms listeFilms = creerListe("films.bin");
 
 	cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
 	//TODO: Afficher le premier film de la liste.  Devrait être Alien.
