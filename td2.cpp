@@ -283,12 +283,11 @@ int main()
 	
 	//TODO: Modifier l'année de naissance de Benedict Cumberbatch pour être 1976 (elle était 0 dans les données lues du fichier).
 	// Vous ne pouvez pas supposer l'ordre des films et des acteurs dans les listes, il faut y aller par son nom.
-	Acteur* benedictC = trouverActeur(listeFilms, "Benedict Cumberbatch");
-	benedictC -> anneeNaissance = 1976;
+	trouverActeur(listeFilms, "Benedict Cumberbatch")->anneeNaissance = 1976;
 
 	cout << ligneDeSeparation << "Liste des films où Benedict Cumberbatch joue sont:" << endl;
 	//TODO: Afficher la liste des films où Benedict Cumberbatch joue.  Il devrait y avoir Le Hobbit et Le jeu de l'imitation.
-	afficherListeFilms(benedictC->joueDans);
+	afficherFilmographieActeur(listeFilms, "Benedict Cumberbatch");
 	//TODO: Détruire et enlever le premier film de la liste (Alien).  Ceci devrait "automatiquement"
 	// (par ce que font vos fonctions) détruire les acteurs Tom Skerritt et John Hurt, mais pas 
 	//Sigourney Weaver puisqu'elle joue aussi dans Avatar.
