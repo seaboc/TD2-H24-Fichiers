@@ -114,7 +114,7 @@ Acteur* trouverActeur(const ListeFilms& liste, const string& nom_acteur){
 //TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.
 // La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau
 // (cherché par nom en utilisant la fonction ci-dessus).
-Acteur* lireActeur(istream& fichier, const ListeFilms& liste) // verifier 
+Acteur* lireActeur(istream& fichier, ListeFilms& liste) // verifier 
 {
 	Acteur acteur = {}; 
 	acteur.nom            = lireString(fichier);
@@ -128,6 +128,7 @@ Acteur* lireActeur(istream& fichier, const ListeFilms& liste) // verifier
 		Acteur* acteur_nv = new Acteur(acteur);
 		return acteur_nv;
 	}
+	//cout << "nom des acteurs crees: " << acteur.nom << endl;
 	return {}; //TODO: Retourner un pointeur soit vers un acteur existant ou un nouvel acteur ayant les bonnes informations,
 	// selon si l'acteur existait déjà.Pour fins de débogage, affichez les noms des acteurs crées; vous ne devriez pas voir 
 	//le même nom d'acteur affiché deux fois pour la création.
@@ -140,22 +141,22 @@ Film* lireFilm(istream& fichier, ListeFilms& liste)
 	film.realisateur = lireString(fichier);
 	film.anneeSortie = int(lireUintTailleVariable(fichier));
 	film.recette     = int(lireUintTailleVariable(fichier));
-	film.acteurs.nElements = int(lireUintTailleVariable(fichier));  //NOTE: Vous avez le droit d'allouer d'un coup le 
+	film.acteurs.nElements = int(lireUintTailleVariable(fichier));
+	Acteur** liste_acteurs = new Acteur*[film.acteurs.nElements]; //alloue tableau de pointeurs (je fais un ptr vers un tab de ptr)
+	Film *nv_film = new Film(film); //alloue ptr film
+	nv_film->acteurs.elements = liste_acteurs;
+	//NOTE: Vous avez le droit d'allouer d'un coup le 
 	//tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions
 	// d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour 
 	//réutiliser cette réallocation.
-	for (int i = 0; i < film.acteurs.nElements; i++) {
+	for (int i = 0; i < nv_film->acteurs.nElements; i++) {
 		Acteur* acteur = lireActeur(fichier, liste); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
-		film.acteurs.elements[i] = acteur; 
+		nv_film->acteurs.elements[i] = acteur;
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.;
-		if (acteur->joueDans.nElements == 0){ // s'il y a rien
-			acteur->joueDans.elements = new Film*[1]; // alloue memoire 
-		}
-		else{
-			Film** nouveaux_films = new Film*[acteur->joueDans.nElements + 1];
-		} // check ajouterfilmliste
+		ajouterFilmListe(acteur->joueDans);
+	
 	}	
-	return {}; //TODO: Retourner le pointeur vers le nouveau film.
+	return (nv_film); //TODO: Retourner le pointeur vers le nouveau film.
 }
 
 ListeFilms creerListe(string nomFichier)
@@ -175,7 +176,7 @@ ListeFilms creerListe(string nomFichier)
 		ajouterFilmListe(liste); 
 	}
 	
-	return {liste}; //TODO: Retourner la liste de films.
+	return (liste); //TODO: Retourner la liste de films.
 }
 
 //TODO: Une fonction pour détruire un film (relâcher toute la mémoire associée à ce film, et les acteurs qui ne jouent plus
@@ -263,12 +264,14 @@ int main()
 
 	//TODO: La ligne suivante devrait lire le fichier binaire en allouant la mémoire nécessaire.  Devrait afficher les
 	// noms de 20 acteurs sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
+	ifstream fichier("films.bin");
 	ListeFilms listeFilms = creerListe("films.bin");
 	
 	// for (auto i : range(listeFilms.nElements)){
 	// 	afficherActeur(*listeFilms.elements[i]-> acteurs.elements[0])
 	// }
-	
+	lireActeur(fichier, listeFilms);
+
 	cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
 	//TODO: Afficher le premier film de la liste.  Devrait être Alien.
 	afficherFilm(*listeFilms.elements[0]);
