@@ -266,11 +266,15 @@ int main()
 	// noms de 20 acteurs sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
 	ifstream fichier("films.bin");
 	ListeFilms listeFilms = creerListe("films.bin");
-	
-	// for (auto i : range(listeFilms.nElements)){
-	// 	afficherActeur(*listeFilms.elements[i]-> acteurs.elements[0])
-	// }
-	lireActeur(fichier, listeFilms);
+	int compteur = 0;
+
+	while (compteur < 20) {
+        Acteur* acteur = lireActeur(fichier, listeFilms);
+        if (acteur) {
+            cout << " " << acteur->nom << endl;
+        }
+		compteur++;
+	}
 
 	cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
 	//TODO: Afficher le premier film de la liste.  Devrait être Alien.
@@ -301,4 +305,5 @@ int main()
 	// droit d'effacer les lignes du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
 	
 	//TODO: Détruire tout avant de terminer le programme.  La bibliothèque de verification_allocation devrait afficher "Aucune fuite detectee." a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
+	detruireListeFilms(listeFilms);
 }
