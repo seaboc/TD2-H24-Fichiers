@@ -63,7 +63,7 @@ string lireString(istream& fichier)
 //dans le cas où la capacité est insuffisante pour ajouter l'élément.  Il faut alors allouer un nouveau tableau plus grand, 
 //copier ce qu'il y avait dans l'ancien, et éliminer l'ancien trop petit.  
 //Cette fonction ne doit copier aucun Film ni Acteur, elle doit copier uniquement des pointeurs.
-void ajouterFilmListe(ListeFilms& liste, Film* film){ // il y avait film mais j'ai enlever pcq ils ont dis qu'on lutilise pas 
+void ListeFilms::ajouterFilmListe(ListeFilms& liste, Film* film){ // il y avait film mais j'ai enlever pcq ils ont dis qu'on lutilise pas 
 	int nouvelle_capacite;
 	if (liste.nElements == liste.capacite){
 		if (liste.capacite == 0){
@@ -90,7 +90,7 @@ void ajouterFilmListe(ListeFilms& liste, Film* film){ // il y avait film mais j'
 
 //TODO: Une fonction pour enlever un Film d'une ListeFilms (enlever le pointeur) sans effacer le film; 
 //la fonction prenant en paramètre un pointeur vers le film à enlever.  L'ordre des films dans la liste n'a pas à être conservé.
-void enleverFilmListe(ListeFilms& liste, Film* film){
+void ListeFilms::enleverFilmListe(ListeFilms& liste, Film* film){
 	for(auto i : range(liste.nElements)){
 		if (liste.elements[i] == film){
 			for(auto j : range(liste.nElements - 1)){ 
@@ -191,7 +191,6 @@ ListeFilms creerListe(string nomFichier)
 //  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
 void detruireFilm(Film* film, ListeFilms& liste)
 {
-	
 		span<Acteur*> collection_acteur(film -> acteurs.elements, film -> acteurs.nElements); 
 		for(Acteur* chaque_acteur : collection_acteur){
 			enleverFilmListe(chaque_acteur->joueDans, film);
@@ -200,19 +199,11 @@ void detruireFilm(Film* film, ListeFilms& liste)
 				delete chaque_acteur;
 				chaque_acteur = nullptr;
 			}
-			// span<Film*> collection_film_acteur(chaque_acteur-> joueDans.elements, chaque_acteur-> joueDans.nElements);
-			// for(Film* film_acteur : collection_film_acteur) {
-			// 	if (film_acteur == film){
-			// 		enleverFilmListe(chaque_acteur-> joueDans, film_acteur);
-			// 		cout << "Acteur détruit : " << chaque_acteur->nom << endl;
-			// 		delete film_acteur;
-			// 	}
-			// }
+			
 		}
 		delete[] film->acteurs.elements;
 		enleverFilmListe(liste, film);
 		delete film;
-
 }
 
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.

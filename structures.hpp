@@ -5,10 +5,28 @@
 
 struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
 
-struct ListeFilms {
-	int capacite, nElements;
-	Film** elements; // Pointeur vers un tableau de Film*, chaque Film* pointant vers un Film.
+class ListeFilms {
+	private: 
+	int capacite_, nElements_;
+	Film** elements_;
+	public:
+	ListeFilms();
+	ListeFilms(int capacite, int nElements, Film** elements);
+	void ajouterFilmListe(ListeFilms& liste, Film* film);
+	void enleverFilmListe(ListeFilms& liste, Film* film);
+	void detruireFilm(Film* film, ListeFilms& liste);
+	void detruireListeFilms(ListeFilms& liste);
+	void afficherListeFilms(const ListeFilms& listeFilms) const;
+	void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur) const;
+	static ListeFilms creerListe(const string nomFichier);
+	 // Pointeur vers un tableau de Film*, chaque Film* pointant vers un Film.
 };
+
+ListeFilms::ListeFilms(int capacite, int nElements, Film** elements){
+	capacite_ = capacite_;
+	nElements_ = nElements;
+	elements_ = elements;
+}
 
 struct ListeActeurs {
 	int capacite, nElements;
