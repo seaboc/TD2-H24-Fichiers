@@ -93,8 +93,8 @@ void ajouterFilmListe(ListeFilms& liste, Film* film){ // il y avait film mais j'
 void enleverFilmListe(ListeFilms& liste, Film* film){
 	for(auto i : range(liste.nElements)){
 		if (liste.elements[i] == film){
-			for(auto j : range(liste.nElements - i - 1)){ //a checker urgent
-				liste.elements[j + i] = liste.elements[i+ j + 1];
+			for(auto j : range(liste.nElements - 1)){ 
+				liste.elements[j] = liste.elements[j + 1];
 			}
 			liste.nElements--;
 			liste.elements[liste.nElements] = nullptr;
@@ -191,22 +191,24 @@ ListeFilms creerListe(string nomFichier)
 //  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
 void detruireFilm(Film* film, ListeFilms& liste)
 {
-	span<Film*> collection_films(liste.elements, liste.nElements);
+	enleverFilmListe(liste,film);
+	//span<Film*> collection_films(liste.elements, liste.nElements);
 	//for(Film* chaque_film : collection_films){  check avec alex 
 		span<Acteur*> collection_acteur(film -> acteurs.elements, film -> acteurs.nElements); 
 		for(Acteur* chaque_acteur : collection_acteur){
-			if (chaque_acteur -> joueDans.nElements == 1){
+			enleverFilmListe(chaque_acteur->joueDans, film);
+			if (chaque_acteur -> joueDans.nElements == 0){
 				delete chaque_acteur;
 			}
 			span<Film*> collection_film_acteur(chaque_acteur-> joueDans.elements, chaque_acteur-> joueDans.nElements);
 			for(Film* film_acteur : collection_film_acteur) {
 				if (film_acteur == film){
-					enleverFilmListe(liste, film_acteur);
+					enleverFilmListe(chaque_acteur-> joueDans, film_acteur);
+					cout << "Acteur détruit : " << chaque_acteur->nom << endl;
 					delete film_acteur;
 				}
 			}
 		}
-		delete film;
 }
 
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
@@ -291,6 +293,7 @@ int main()
 	//TODO: Détruire et enlever le premier film de la liste (Alien).  Ceci devrait "automatiquement"
 	// (par ce que font vos fonctions) détruire les acteurs Tom Skerritt et John Hurt, mais pas 
 	//Sigourney Weaver puisqu'elle joue aussi dans Avatar.
+
 	detruireFilm(listeFilms.elements[0],listeFilms);
 	
 	cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
