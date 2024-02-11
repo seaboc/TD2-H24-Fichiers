@@ -191,24 +191,28 @@ ListeFilms creerListe(string nomFichier)
 //  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
 void detruireFilm(Film* film, ListeFilms& liste)
 {
-	enleverFilmListe(liste,film);
-	//span<Film*> collection_films(liste.elements, liste.nElements);
-	//for(Film* chaque_film : collection_films){  check avec alex 
+	
 		span<Acteur*> collection_acteur(film -> acteurs.elements, film -> acteurs.nElements); 
 		for(Acteur* chaque_acteur : collection_acteur){
 			enleverFilmListe(chaque_acteur->joueDans, film);
 			if (chaque_acteur -> joueDans.nElements == 0){
+				delete[] chaque_acteur-> joueDans.elements;
 				delete chaque_acteur;
+				chaque_acteur = nullptr;
 			}
-			span<Film*> collection_film_acteur(chaque_acteur-> joueDans.elements, chaque_acteur-> joueDans.nElements);
-			for(Film* film_acteur : collection_film_acteur) {
-				if (film_acteur == film){
-					enleverFilmListe(chaque_acteur-> joueDans, film_acteur);
-					cout << "Acteur détruit : " << chaque_acteur->nom << endl;
-					delete film_acteur;
-				}
-			}
+			// span<Film*> collection_film_acteur(chaque_acteur-> joueDans.elements, chaque_acteur-> joueDans.nElements);
+			// for(Film* film_acteur : collection_film_acteur) {
+			// 	if (film_acteur == film){
+			// 		enleverFilmListe(chaque_acteur-> joueDans, film_acteur);
+			// 		cout << "Acteur détruit : " << chaque_acteur->nom << endl;
+			// 		delete film_acteur;
+			// 	}
+			// }
 		}
+		delete[] film->acteurs.elements;
+		enleverFilmListe(liste, film);
+		delete film;
+
 }
 
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
