@@ -65,18 +65,14 @@ string lireString(istream& fichier)
 //Cette fonction ne doit copier aucun Film ni Acteur, elle doit copier uniquement des pointeurs.
 
 
-void ListeFilms::ajouterFilmListe(Film* film){ // il y avait film mais j'ai enlever pcq ils ont dis qu'on lutilise pas 
+void ListeFilms::ajouterFilmListe(Film* film){ 
 	int nouvelle_capacite;
 	if (capacite_ == 0){
 		capacite_ = 1;
-		Film** nv_tableau = new Film*[capacite_];
-		elements = nv_tableau;
+		elements = new Film*[capacite_];
 	}
 	if (capacite_ == nElements_){
-
-		nouvelle_capacite = capacite_ * 2; //pour doubler la capacité
-	
-			// allouer un nouveau tableau plus grand
+		nouvelle_capacite = capacite_ * 2; 
 		Film** nouveau_tableau = new Film*[nouvelle_capacite];
 		for(auto i : range(nElements_)){
 			nouveau_tableau[i] = elements[i]; //copier ce qu'il y avait dans l'ancien
@@ -191,7 +187,7 @@ ListeFilms ListeFilms::creerListe(string nomFichier)
 //  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
 void ListeFilms::detruireFilm(Film* film)
 {
-		for (int i=0;i<nElements_; ++i) {
+		for (int i=0;i< nElements_ ; ++i) {
 			if (this->elements[i] == film){
 				for (int j =0; j<film->acteurs.nElements; ++j) {
 					Acteur* acteur = film->acteurs.elements[j];
